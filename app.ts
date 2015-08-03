@@ -27,7 +27,7 @@ app.on('ready', function() {
 
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
-
+    //mainWindow.loadUrl("http://gmail.com")
     // Open the devtools.
     //mainWindow.openDevTools();
 
