@@ -5,3 +5,7 @@
 .listitem.item_file {
     color: blue;
 }
+
+.column {
+    float: left;
+}

@@ -6,18 +6,45 @@ import child_process = require('child_process')
 declare var $ : JQueryStatic
 declare var _ : UnderscoreStatic
 
+interface ISessionsScope extends angular.IScope {
+    sessions: Session[]
+}
+
 interface IListingScope extends angular.IScope {
     session: Session
     clicked(DirItem): void
     up(): void
 }
 
+interface IQuickopenScope extends angular.IScope {
+    folders: DirItem[]
+    clicked(DirItem): void
+}
+
 var app = angular.module('electronshell', [])
 
-app.controller("listing", function($scope: IListingScope) {
-    var sess = new Session(".")
+app.controller("quickopen", function($scope: IQuickopenScope) {
+    var folders = [
+        new DirItem("/Users/jonm"),
+        new DirItem("/Users/jonm/prog"),
+        new DirItem("/Users/jonm/Downloads")
+    ]
+    $scope.folders = folders
+    $scope.clicked = (item: DirItem) => {
+        console.log('clicked ', item)
+    }
+})
 
-    $scope.session = sess
+app.controller("sessions", function($scope: ISessionsScope) {
+    var sess1 = new Session("."),
+        sess2 = new Session("/Users/jonm")
+
+    $scope.sessions = [sess1, sess2]
+})
+
+
+app.controller("listing", function($scope: IListingScope) {
+    console.log($scope.session)
     $scope.clicked = (item: DirItem) => {
         if (item.type == ItemTypes.Dir) {
             $scope.session = new Session(item.path)
@@ -45,11 +72,11 @@ class DirItem {
     stat: fs.Stats
     type: ItemTypes
 
-    constructor(path: string, basename: string) {
-        this.path = path
-        this.basename = basename
+    constructor(fullpath: string) {
+        this.path = fullpath
+        this.basename = path.basename(fullpath)
         this.id = _.uniqueId("dir_item_")
-        this.stat = fs.statSync(path)
+        this.stat = fs.statSync(fullpath)
         if (this.stat.isDirectory()) {
             this.type = ItemTypes.Dir
         } else {
@@ -77,7 +104,7 @@ class Session {
     setDir(newDir: string) {
         this.dir = newDir
         this.files = fs.readdirSync(newDir).map(function(item: string) {
-            return new DirItem(path.join(newDir, item), item)
+            return new DirItem(path.join(newDir, item))
         })
         console.log(this.files)
     }

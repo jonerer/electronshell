@@ -7,16 +7,24 @@
 <body>
 <h1>Hello World!</h1>
 
-
-<div class="shellsession" ng-controller="listing">
-    <div ng-click="up()">
-        Go up
+<span class="column" ng-controller="quickopen">
+    <div ng-repeat="folder in folders" ng-dblclick="clicked(folder)">
+        {{ folder.path }}
     </div>
-    <br />
-    <div ng-repeat="item in session.files" class='listitem {{item.html_class()}}' ng-click="clicked(item)">
-        {{ item.basename }}
-    </div>
-</div>
+</span>
+<span ng-controller="sessions">
+    <span ng-repeat="session in sessions" class="session column">
+        <div class="shellsession" ng-controller="listing">
+            <div ng-click="up()">
+                Go up
+            </div>
+            <br />
+            <div ng-repeat="item in session.files" class='listitem {{item.html_class()}}' ng-click="clicked(item)">
+                {{ item.basename }}
+            </div>
+        </div>
+    </span>
+</span>
 
 <script src="node_modules/jquery/dist/jquery.js"></script>
 <script>window.$ = window.jQuery = require('jquery');</script>
