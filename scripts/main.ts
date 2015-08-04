@@ -21,14 +21,49 @@ interface IListingScope extends angular.IScope {
     up(): void
 }
 
+interface ISearchValue {
+    text: string
+    shown: boolean
+    active: boolean
+}
+
 interface IQuickopenScope extends angular.IScope {
     folders: DirItem[]
     clicked(DirItem): void
 }
 
+interface IQuickSearchScope extends angular.IScope {
+    search: ISearchValue
+}
+
+interface IBodyScope extends angular.IScope {
+    keydown(IAngularEvent): void
+}
+
+var searchValue: ISearchValue = { text: "", shown: false, active: false }
+
 var app = angular.module('electronshell', [])
 
 app.value("sessions", [])
+app.value("search", searchValue)
+
+app.controller("body", function($scope: IBodyScope, search: ISearchValue) {
+    $scope.keydown = ($event: any) => {
+        var key = $event.keyCode,
+            str = String.fromCharCode(key)
+
+        if (key === 8 && search.text.length > 0) {
+            // backspace
+            search.text = search.text.substr(0, search.text.length-1)
+        } else {
+            search.text += str
+        }
+        search.shown = search.text.length > 0
+        search.active = search.shown
+
+        console.log($event)
+    }
+})
 
 app.controller("quickopen", function($scope: IQuickopenScope, sessions: Session[]) {
     var folders = [
@@ -56,6 +91,9 @@ app.controller("session", function($scope: ISessionScope) {
     }
 })
 
+app.controller("quicksearch", function($scope: IQuickSearchScope, search: ISearchValue) {
+    $scope.search = search
+})
 
 app.controller("listing", function($scope: IListingScope) {
     console.log($scope.session)
@@ -77,6 +115,28 @@ app.controller("listing", function($scope: IListingScope) {
     $scope.up = () => {
         var newpath = path.resolve($scope.session.dir, "..")
         $scope.session = new Session(newpath)
+    }
+})
+ //
+app.filter("quicksearch_filter", function(search: ISearchValue) {
+    return function(items: DirItem[]) {
+        var filtered = []
+        items.forEach(function(item: DirItem) {
+            if (search.active) {
+                if (item.path.toLowerCase().indexOf(search.text.toLowerCase()) !== -1) {
+                    filtered.push(item)
+                }
+            } else {
+                filtered.push(item)
+            }
+        })
+        console.log('in filter. got this: ', items)
+        return filtered;
+        //if (search.active) {
+        //    return false;
+        //} else {
+        //    return true;
+        //}
     }
 })
 

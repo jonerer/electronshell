@@ -17,3 +17,11 @@
 .item.selected {
     background: lightblue;
 }
+
+.quicksearch {
+    border: 1px solid black;
+    margin: 3px;
+    padding: 3px;
+    font-weight: bold;
+    width: 100%;
+}

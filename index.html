@@ -4,9 +4,12 @@
     <title>Hello World!</title>
     <link rel="stylesheet" href="styles/style.css"/>
 </head>
-<body>
+<body ng-controller="body" ng-keydown="keydown($event)">
 <h1>Hello World!</h1>
 
+<div ng-controller="quicksearch" ng-show="search.shown" class="quicksearch">
+    {{ search.text }}
+</div>
 <span class="column" ng-controller="quickopen">
     <div ng-repeat="folder in folders" ng-dblclick="clicked(folder)">
         {{ folder.path }}
@@ -19,7 +22,7 @@
                 Go up
             </div>
             <br />
-            <div ng-repeat="item in session.files" class='listitem {{item.html_class()}}' ng-click="clicked($event, item)" ng-dblclick="dblclicked(item)">
+            <div ng-repeat="item in session.files | quicksearch_filter" class='listitem {{item.html_class()}}' ng-click="clicked($event, item)" ng-dblclick="dblclicked(item)">
                 {{ item.basename }}
             </div>
         </div>
