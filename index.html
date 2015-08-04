@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="electronshell">
 <head>
     <title>Hello World!</title>
     <link rel="stylesheet" href="styles/style.css"/>
@@ -7,14 +7,21 @@
 <body>
 <h1>Hello World!</h1>
 
-We are using io.js <script>document.write(process.version)</script>
-and Electron <script>document.write(process.versions['electron'])</script>.
 
-<div class="shellsession"></div>
+<div class="shellsession" ng-controller="listing">
+    <div ng-click="up()">
+        Go up
+    </div>
+    <br />
+    <div ng-repeat="item in session.files" class='listitem {{item.html_class()}}' ng-click="clicked(item)">
+        {{ item.basename }}
+    </div>
+</div>
 
 <script src="node_modules/jquery/dist/jquery.js"></script>
 <script>window.$ = window.jQuery = require('jquery');</script>
 <script src="node_modules/underscore/underscore.js"></script>
+<script src="node_modules/angular/angular.js"></script>
 <script src="scripts/main.js"></script>
 </body>
 </html>

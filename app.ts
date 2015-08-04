@@ -14,9 +14,9 @@ var mainWindow : GitHubElectron.BrowserWindow = null;
 app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform != 'darwin') {
+    //if (process.platform != 'darwin') {
         app.quit();
-    }
+    //}
 });
 
 // This method will be called when Electron has finished
@@ -29,7 +29,7 @@ app.on('ready', function() {
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
     //mainWindow.loadUrl("http://gmail.com")
     // Open the devtools.
-    //mainWindow.openDevTools();
+    mainWindow.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {

@@ -2,18 +2,67 @@
 
 import fs = require('fs')
 import path = require('path')
+import child_process = require('child_process')
 declare var $ : JQueryStatic
 declare var _ : UnderscoreStatic
+
+interface IListingScope extends angular.IScope {
+    session: Session
+    clicked(DirItem): void
+    up(): void
+}
+
+var app = angular.module('electronshell', [])
+
+app.controller("listing", function($scope: IListingScope) {
+    var sess = new Session(".")
+
+    $scope.session = sess
+    $scope.clicked = (item: DirItem) => {
+        if (item.type == ItemTypes.Dir) {
+            $scope.session = new Session(item.path)
+        } else {
+            child_process.exec("open " + item.path)
+        }
+        console.log("clicked", item.id)
+    }
+
+    $scope.up = () => {
+        var newpath = path.resolve($scope.session.dir, "..")
+        $scope.session = new Session(newpath)
+    }
+})
+
+enum ItemTypes {
+    File,
+    Dir
+}
 
 class DirItem {
     path: string
     basename: string
     id: string
+    stat: fs.Stats
+    type: ItemTypes
 
     constructor(path: string, basename: string) {
         this.path = path
         this.basename = basename
         this.id = _.uniqueId("dir_item_")
+        this.stat = fs.statSync(path)
+        if (this.stat.isDirectory()) {
+            this.type = ItemTypes.Dir
+        } else {
+            this.type = ItemTypes.File
+        }
+    }
+
+    type_string() {
+        return this.type == ItemTypes.File ? "file" : "dir"
+    }
+
+    html_class() {
+        return "item_" + this.type_string()
     }
 }
 
@@ -54,14 +103,5 @@ class Session {
 }
 
 
-$(document).ready(function() {
-    $(document).on('click', '.listitem', function(event: JQueryEventObject) {
-        var id: string = $(event.currentTarget).attr("data-id")
-        var f = sess.getFile(id)
-
-        console.log("clicked ", f)
-    })
-
-    var sess = new Session("/Users/jonm/")
-    sess.renderListing(".shellsession")
-})
+//$(document).ready(function() {
+//})

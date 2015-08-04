@@ -1,3 +1,7 @@
-.listitem {
+.listitem.item_dir {
     color: grey;
+}
+
+.listitem.item_file {
+    color: blue;
 }
