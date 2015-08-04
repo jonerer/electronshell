@@ -10,9 +10,14 @@ interface ISessionsScope extends angular.IScope {
     sessions: Session[]
 }
 
+interface ISessionScope extends angular.IScope {
+    clicked(Session): void
+}
+
 interface IListingScope extends angular.IScope {
     session: Session
-    clicked(DirItem): void
+    clicked(IAngularEvent, DirItem): void
+    dblclicked(DirItem): void
     up(): void
 }
 
@@ -23,7 +28,9 @@ interface IQuickopenScope extends angular.IScope {
 
 var app = angular.module('electronshell', [])
 
-app.controller("quickopen", function($scope: IQuickopenScope) {
+app.value("sessions", [])
+
+app.controller("quickopen", function($scope: IQuickopenScope, sessions: Session[]) {
     var folders = [
         new DirItem("/Users/jonm"),
         new DirItem("/Users/jonm/prog"),
@@ -31,21 +38,33 @@ app.controller("quickopen", function($scope: IQuickopenScope) {
     ]
     $scope.folders = folders
     $scope.clicked = (item: DirItem) => {
-        console.log('clicked ', item)
+        sessions.push(new Session(item.path))
+        //console.log('clicked ', item)
     }
 })
 
-app.controller("sessions", function($scope: ISessionsScope) {
-    var sess1 = new Session("."),
-        sess2 = new Session("/Users/jonm")
+app.controller("sessions", function($scope: ISessionsScope, sessions: Session[]) {
+    sessions.push(new Session("."))
+    sessions.push(new Session("/Users/jonm"))
 
-    $scope.sessions = [sess1, sess2]
+    $scope.sessions = sessions
+})
+
+app.controller("session", function($scope: ISessionScope) {
+    $scope.clicked = (item: Session) => {
+        item.toggleSelected()
+    }
 })
 
 
 app.controller("listing", function($scope: IListingScope) {
     console.log($scope.session)
-    $scope.clicked = (item: DirItem) => {
+    $scope.clicked = (event: angular.IAngularEvent, item: DirItem) => {
+        item.toggleSelected()
+        event.stopPropagation()
+        return false;
+    }
+    $scope.dblclicked = (item: DirItem) => {
         if (item.type == ItemTypes.Dir) {
             $scope.session = new Session(item.path)
         } else {
@@ -53,6 +72,7 @@ app.controller("listing", function($scope: IListingScope) {
         }
         console.log("clicked", item.id)
     }
+
 
     $scope.up = () => {
         var newpath = path.resolve($scope.session.dir, "..")
@@ -71,6 +91,7 @@ class DirItem {
     id: string
     stat: fs.Stats
     type: ItemTypes
+    selected: boolean
 
     constructor(fullpath: string) {
         this.path = fullpath
@@ -89,13 +110,22 @@ class DirItem {
     }
 
     html_class() {
-        return "item_" + this.type_string()
+        return "item_" + this.type_string() + " item " + this.selected_text()
+    }
+
+    toggleSelected():void {
+        this.selected = !this.selected
+    }
+
+    private selected_text():String {
+        return this.selected ? "selected" : "unselected"
     }
 }
 
 class Session {
     dir: string
     files: DirItem[]
+    selected: boolean
 
     constructor(dir: string) {
         this.setDir(dir)
@@ -126,6 +156,18 @@ class Session {
             var txt = litem_tpl(str)
             $('.shellsession').append(txt)
         })
+    }
+
+    toggleSelected() {
+        this.selected = !this.selected
+    }
+
+    html_class() {
+        return this.selected_text()
+    }
+
+    private selected_text():String {
+        return this.selected ? "selected" : "unselected"
     }
 }
 

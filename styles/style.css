@@ -1,5 +1,5 @@
 .listitem.item_dir {
-    color: grey;
+    color: darkgrey;
 }
 
 .listitem.item_file {
@@ -8,4 +8,12 @@
 
 .column {
     float: left;
+}
+
+.session.selected {
+    background: lightgray;
+}
+
+.item.selected {
+    background: lightblue;
 }

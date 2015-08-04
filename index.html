@@ -13,13 +13,13 @@
     </div>
 </span>
 <span ng-controller="sessions">
-    <span ng-repeat="session in sessions" class="session column">
+    <span ng-controller="session" ng-repeat="session in sessions" class="session column {{session.html_class()}}" ng-click="clicked(session)">
         <div class="shellsession" ng-controller="listing">
             <div ng-click="up()">
                 Go up
             </div>
             <br />
-            <div ng-repeat="item in session.files" class='listitem {{item.html_class()}}' ng-click="clicked(item)">
+            <div ng-repeat="item in session.files" class='listitem {{item.html_class()}}' ng-click="clicked($event, item)" ng-dblclick="dblclicked(item)">
                 {{ item.basename }}
             </div>
         </div>
