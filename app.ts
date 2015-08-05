@@ -1,4 +1,4 @@
-/// <reference path="typings/all.d.ts" />
+/// <reference path="typings/all.ts" />
 
 var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
