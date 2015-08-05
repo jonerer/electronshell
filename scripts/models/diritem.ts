@@ -1,4 +1,3 @@
-/// <reference path="itemtypes.ts" />
 /// <reference path="../../typings/all.ts" />
 
 var fs = require('fs')
@@ -26,11 +25,6 @@ interface Stats {
     atime: Date;
     mtime: Date;
     ctime: Date;
-}
-
-enum ItemTypes {
-    File,
-    Dir
 }
 
 class DirItem {
@@ -61,8 +55,8 @@ class DirItem {
         return "item_" + this.type_string() + " item " + this.selected_text()
     }
 
-    toggleSelected():void {
-        this.selected = !this.selected
+    setSelected(value: boolean):void {
+        this.selected = value
     }
 
     private selected_text():String {
