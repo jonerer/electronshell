@@ -19,6 +19,7 @@
         <span ng-controller="session" ng-repeat="session in sessions" class="session column {{session.html_class()}}"
               ng-click="clicked(session)">
             <div class="shellsession" ng-controller="listing">
+                <h2>{{ session.printed_name() }}</h2>
                 <div ng-click="up()">
                     Go up
                 </div>
@@ -33,15 +34,39 @@
     </span>
 </div>
 
+<div class="terminalcontainer">
+    {{ sessions }}
+    <div ng-controller="terminals">
+        <ul class="headers">
+            <li ng-repeat="session in sessions" ng-class="{shown: session == shown}" class="header {{ session.html_class() }}" ng-click="clicked(session)">terminal header</li>
+        </ul>
+        <div class="terminals">
+            <div ng-controller="terminal" ng-repeat="session in sessions" ng-show="session == shown" class="terminal">
+                <div class="lines">
+                    <div ng-repeat="line in lines">{{ line.text }}</div>
+                </div>
+                <div class="prompt">{{ terminal.prompt_string() }}
+                    <form ng-submit="submit()">
+                    <input type="text" ng-model="input"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="node_modules/jquery/dist/jquery.js"></script>
 <script>window.$ = window.jQuery = require('jquery');</script>
 <script src="node_modules/underscore/underscore.js"></script>
 <script src="node_modules/angular/angular.js"></script>
 <script src="scripts/models/diritem.js"></script>
 <script src="scripts/models/session.js"></script>
+<script src="scripts/models/terminal.js"></script>
+
 <script src="scripts/quicksearch/controllers.js"></script>
 <script src="scripts/quickopen/controllers.js"></script>
 <script src="scripts/sessions/controllers.js"></script>
+<script src="scripts/terminals/controllers.js"></script>
 
 <script src="scripts/main.js"></script>
 </body>

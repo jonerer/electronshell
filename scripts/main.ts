@@ -8,6 +8,6 @@ declare var _ : UnderscoreStatic
 
 
 
-var app = angular.module('electronshell', ['session', 'quickopen', 'quicksearch'])
+var app = angular.module('electronshell', ['session', 'quickopen', 'quicksearch', 'terminals'])
 
 app.value("sessions", [])

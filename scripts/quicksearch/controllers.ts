@@ -45,24 +45,33 @@ quicksearch.controller("body", function ($scope:IBodyScope, search:ISearchValue)
         var key = $event.keyCode,
             str = String.fromCharCode(key)
 
-        var previousText = search.text
-        if (key === 8 && search.text.length > 0) {
-            // backspace
-            search.text = search.text.substr(0, search.text.length - 1)
-        } else if (key === 27) {
-            search.shown = false
-        } else {
-            search.text += str
+        console.log($event)
+        if (search.active) {
+            var previousText = search.text
+            if (key === 8 && search.text.length > 0) {
+                // backspace
+                search.text = search.text.substr(0, search.text.length - 1)
+            } else if (key === 27) {
+                search.shown = false
+            } else {
+                search.text += str
+            }
+            if (search.text.length === 0) {
+                search.shown = search.text.length > 0
+                search.active = search.shown
+            } else if (previousText === "") {
+                search.shown = true
+                search.active = true
+            } else if (previousText !== search.text && search.text.length > 0) {
+                search.shown = true
+                search.active = true
+            }
         }
-        if (search.text.length === 0) {
-            search.shown = search.text.length > 0
-            search.active = search.shown
-        } else if (previousText === "") {
+
+        if (str === "G" && $event.ctrlKey) {
             search.shown = true
             search.active = true
-        } else if (previousText !== search.text && search.text.length > 0) {
-            search.shown = true
-            search.active = true
         }
+
     }
 })

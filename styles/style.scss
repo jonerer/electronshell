@@ -1,4 +1,7 @@
 $leftmenu_width: 150px;
+$terminal_height: 150px;
+$terminal_header_height: 26px;
+$terminal_input_height: 20px;
 
 .listitem {
   &.item_dir {
@@ -13,6 +16,7 @@ $leftmenu_width: 150px;
 .column {
   float: left;
   height: 100%;
+  overflow-y: auto;
 }
 
 .session.selected {
@@ -59,5 +63,55 @@ body {
   left: $leftmenu_width;
   position: fixed;
   right: 0;
-  height: 100%;;
+  bottom: $terminal_height;
+  top: 0;
+}
+
+.terminalcontainer {
+  position: fixed;
+  height: $terminal_height;
+  left: $leftmenu_width;
+  border-top: 1px solid black;
+  right: 0;
+  bottom: 0;
+
+  .headers {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid lightgrey;
+    height: $terminal_header_height;
+
+    li {
+      display: inline-block;
+      margin: 0 5px 0 5px;
+      padding: 5px;
+      border-right: 1px solid lightgrey;
+      
+      &.shown {
+        text-decoration: underline;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.terminal {
+  .lines {
+    height: $terminal_height - $terminal_input_height - $terminal_header_height - 4px; // so sue me :p
+    overflow-y: auto;
+  }
+}
+
+.prompt {
+  position: fixed;
+  bottom: 0;
+  height: $terminal_input_height;
+  border-top: 1px solid grey;
+  width: 100%;
+
+  form {
+    display: inline;
+  }
 }
