@@ -2,32 +2,36 @@
 <html ng-app="electronshell">
 <head>
     <title>Hello World!</title>
-    <link rel="stylesheet" href="styles/style.css"/>
+    <link rel="stylesheet" href="styles/style.scss"/>
 </head>
 <body ng-controller="body" ng-keydown="keydown($event)">
-<h1>Hello World!</h1>
-
 <div ng-controller="quicksearch" ng-show="search.shown" class="quicksearch">
     {{ search.text }}
 </div>
-<span class="column" ng-controller="quickopen">
+<span class="column quickopen" ng-controller="quickopen">
     <div ng-repeat="folder in folders" ng-dblclick="clicked(folder)">
         {{ folder.path }}
     </div>
 </span>
-<span ng-controller="sessions">
-    <span ng-controller="session" ng-repeat="session in sessions" class="session column {{session.html_class()}}" ng-click="clicked(session)">
-        <div class="shellsession" ng-controller="listing">
-            <div ng-click="up()">
-                Go up
+
+<div class="sessionscontainer">
+    <span ng-controller="sessions">
+        <span ng-controller="session" ng-repeat="session in sessions" class="session column {{session.html_class()}}"
+              ng-click="clicked(session)">
+            <div class="shellsession" ng-controller="listing">
+                <div ng-click="up()">
+                    Go up
+                </div>
+                <br/>
+
+                <div ng-repeat="item in session.files | quicksearch_filter" class='listitem {{item.html_class()}}'
+                     ng-click="clicked($event, item)" ng-dblclick="dblclicked(item)">
+                    {{ item.basename }}
+                </div>
             </div>
-            <br />
-            <div ng-repeat="item in session.files | quicksearch_filter" class='listitem {{item.html_class()}}' ng-click="clicked($event, item)" ng-dblclick="dblclicked(item)">
-                {{ item.basename }}
-            </div>
-        </div>
+        </span>
     </span>
-</span>
+</div>
 
 <script src="node_modules/jquery/dist/jquery.js"></script>
 <script>window.$ = window.jQuery = require('jquery');</script>
