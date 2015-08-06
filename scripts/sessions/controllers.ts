@@ -24,9 +24,14 @@ session.controller("sessions", function ($scope:ISessionsScope, sessions:Session
     $scope.sessions = sessions
 })
 
-session.controller("session", function ($scope:ISessionScope) {
+session.controller("session", function ($scope:ISessionScope, sessions: Session[]) {
     $scope.clicked = (item:Session) => {
         item.setSelected(true)
+        sessions.forEach((session: Session) => {
+            if (session != item) {
+                session.setSelected(false)
+            }
+        })
     }
 })
 

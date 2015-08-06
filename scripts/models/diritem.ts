@@ -34,6 +34,7 @@ class DirItem {
     stat: Stats
     type:ItemTypes
     selected:boolean
+    display_name: string
 
     constructor(fullpath:string) {
         this.path = fullpath
@@ -61,5 +62,13 @@ class DirItem {
 
     private selected_text():String {
         return this.selected ? "selected" : "unselected"
+    }
+
+    printed_name(): String {
+        if (!!this.display_name) {
+            return this.display_name
+        } else {
+            return this.basename
+        }
     }
 }

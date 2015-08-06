@@ -2,7 +2,7 @@
 <html ng-app="electronshell">
 <head>
     <title>Hello World!</title>
-    <link rel="stylesheet" href="styles/style.scss"/>
+    <link rel="stylesheet" href="styles/style.css"/>
 </head>
 <body ng-controller="body" ng-keydown="keydown($event)">
 <div ng-controller="quicksearch" ng-show="search.shown" class="quicksearch">
@@ -10,7 +10,7 @@
 </div>
 <span class="column quickopen" ng-controller="quickopen">
     <div ng-repeat="folder in folders" ng-dblclick="clicked(folder)">
-        {{ folder.path }}
+        {{ folder.printed_name() }}
     </div>
 </span>
 

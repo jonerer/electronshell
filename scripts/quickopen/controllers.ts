@@ -8,8 +8,10 @@ interface IQuickopenScope extends angular.IScope {
 var quickopen = angular.module('quickopen', [])
 
 quickopen.controller("quickopen", function ($scope:IQuickopenScope, sessions:Session[]) {
+    var c_drive = new DirItem("C:/");
+    c_drive.display_name = "Local Disk"
     $scope.folders = [
-        new DirItem("C:/"),
+        c_drive,
         new DirItem("C:/spa"),
         new DirItem("C:/Qt")
     ]
