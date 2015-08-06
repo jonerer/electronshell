@@ -9,7 +9,7 @@ interface ITerminalsScope extends angular.IScope {
 }
 
 interface ITerminalScope extends angular.IScope {
-    lines: string[]
+    lines: TerminalLine[]
     session: Session
     terminal: Terminal
     input: string
