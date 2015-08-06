@@ -40,7 +40,9 @@ terminals.controller("terminal", function($scope: ITerminalScope) {
         terminal.lines.push(new TerminalLine("$ " + line))
 
         var spawn = child_process.spawn,
-            cmd = spawn(line)
+            cmd = spawn(line, [], {
+                cwd: terminal.session.dir
+            })
 
         cmd.stdout.on('data', function(data: Buffer) {
             var str = data.toString('utf8')

@@ -16,15 +16,15 @@ class TerminalLine {
 class Terminal {
     session: Session
     lines: TerminalLine[]
-    location: string
 
     constructor(session: Session) {
-        this.location = session.dir
+        this.session = session
         this.lines = []
     }
 
     prompt_string() : string {
-        return this.location
+        console.log("prompt string in terminal")
+        return this.session.dir
     }
 }
 

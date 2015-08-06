@@ -19,7 +19,6 @@ class Session {
         this.files = fs.readdirSync(newDir).map(function (item:string) {
             return new DirItem(path.join(newDir, item))
         })
-        console.log(this.files)
     }
 
     printed_name() {
